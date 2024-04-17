@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Comidas - Mi Menú Personal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-image: url('static/images/uwu.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #4a342a; /* Color café oscuro para el texto principal */
+        }
+
+        .navbar {
+            background-color: #4a342a; /* Color café oscuro para la barra de navegación */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff; /* Color blanco para el texto del logo */
+            font-size: 1.5rem; /* Tamaño del texto del logo */
+            text-transform: uppercase; /* Convertir texto a mayúsculas */
+            letter-spacing: 2px; /* Espaciado entre letras */
+        }
+
+        .navbar-text {
+            color: #fff; /* Color blanco para el texto del usuario */
+            font-size: 0.9rem; /* Tamaño del texto del usuario */
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff; /* Color blanco para los enlaces del navbar */
+            font-size: 0.9rem; /* Tamaño del texto de los enlaces */
+            margin-left: 15px; /* Espaciado entre los enlaces */
+            transition: color 0.3s; /* Transición suave del color al pasar el ratón */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffd369; /* Color amarillo al pasar el ratón sobre los enlaces */
+        }
+
+        h1 {
+            margin-top: 3rem;
+            color: #3E2709; /* Color blanco para el título */
+        }
+
+        .btn-primary {
+            background-color: #4a342a; /* Color café oscuro para el botón principal */
+            border-color: #4a342a;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e1b13; /* Color café más oscuro al pasar el ratón */
+            border-color: #2e1b13;
+        }
+
+        .table {
+            background-color: #f5f5f5; /* Color de fondo para la tabla */
+        }
+
+        .modal-content {
+            background-color: #f5f5f5; /* Color de fondo para el modal */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            border-color: #4a342a; /* Color del borde del campo de formulario */
+        }
+
+        .btn-danger {
+            background-color: #801515; /* Color rojo oscuro para botón de eliminar */
+            border-color: #801515;
+        }
+
+        .btn-danger:hover {
+            background-color: #6a0f0f; /* Color rojo más oscuro al pasar el ratón */
+            border-color: #6a0f0f;
+        }
+
+        .container {
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#">Mi Banquetera</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#inicio">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Acerca</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contáctanos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="mt-4">Lista de productos</h1>
+                <!-- Botón para Agregar -->
+                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#taskModal" data-action="add">Agregar <i class="fas fa-plus"></i></button>
+                <table class="table table-bordered table-hover mt-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Artículo</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <th scope="row">{{ task[0] }}</th>
+                            <td>{{ task[1] }}</td>
+                            <td>{{ task[3] }}</td>
+                            <td>{{ task[2] }}</td>
+                            <td>
+                                <!-- Botón para Editar -->
+                                <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#taskModal" data-action="edit" data-id="{{ task[0] }}" data-nombre="{{ task[1] }}" data-descripcion="{{ task[2] }}" data-cantidad="{{ task[3] }}">Editar <i class="fas fa-edit"></i></button>
+                                <!-- Botón para Eliminar -->
+                                <button type="button" class="btn btn-danger btn-sm btn-delete" data-taskid="{{ task[0] }}">Eliminar <i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar tarea -->
+    <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editTaskForm" method="POST">
+                        <input type="hidden" id="editTaskId" name="task_id">
+                        <div class="mb-3">
+                            <label for="editNombre" class="form-label">Nombre:</label>
+                            <input type="text" class="form-control" id="editNombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescripcion" class="form-label">Descripción:</label>
+                            <input type="text" class="form-control" id="editDescripcion" name="descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCantidad" class="form-label">Cantidad:</label>
+                            <input type="number" class="form-control" id="editCantidad" name="cantidad" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para confirmar eliminación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que quieres eliminar este artículo?
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteTaskForm" action="/delete_task" method="post">
+                        <input type="hidden" id="deleteTaskId" name="task_id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var editModal = document.getElementById('taskModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var action = button.getAttribute('data-action');
+
+            if (action === 'add') {
+                // Configurar el formulario para agregar una nueva tarea
+                var form = document.getElementById('editTaskForm');
+                form.action = "/add_task";  // Ruta Flask para agregar la tarea
+                document.getElementById('editTaskId').value = ''; // Limpiar el ID (si es necesario)
+                document.getElementById('editNombre').value = '';
+                document.getElementById('editDescripcion').value = '';
+                document.getElementById('editCantidad').value = '';
+            } else if (action === 'edit') {
+                // Configurar el formulario para editar la tarea existente
+                var id = button.getAttribute('data-id');
+                var nombre = button.getAttribute('data-nombre');
+                var descripcion = button.getAttribute('data-descripcion');
+                var cantidad = button.getAttribute('data-cantidad');
+                var form = document.getElementById('editTaskForm');
+                form.action = "/edit_task/" + id;  // Ruta Flask para editar la tarea
+                document.getElementById('editTaskId').value = id;
+                document.getElementById('editNombre').value = nombre;
+                document.getElementById('editDescripcion').value = descripcion;
+                document.getElementById('editCantidad').value = cantidad;
+            }
+        });
+
+        var deleteButtons = document.querySelectorAll('.btn-delete');
+        deleteButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var taskId = button.getAttribute('data-taskid');
+                document.getElementById('deleteTaskId').value = taskId;
+                var modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                modal.show();
+            });
+        });
+    </script>
+</body>
+</html>

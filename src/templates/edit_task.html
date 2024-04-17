@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Tarea</title>
+</head>
+<body>
+    <h2>Editar Tarea</h2>
+    <form method="POST" action="{{ url_for('edit_task', task_id=task[0]) }}">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" value="{{ task[1] }}"><br>
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion">{{ task[2] }}</textarea><br>
+        <label for="cantidad">Cantidad:</label><br>
+        <input type="number" id="cantidad" name="cantidad" value="{{ task[3] }}"><br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</body>
+</html>
